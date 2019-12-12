@@ -151,7 +151,11 @@ def sarah_step(net, optimizer, train_loader, test_loader, inner_iter_num):
         for p_net in net.parameters():
             pre_net_full.append(p_net.grad.data)
         
-        #torch.nn.utils.clip_grad_norm_(net.parameters(), 0.2)
+        # record previous net mini batch gradient
+        del pre_net_mini
+        pre_net_mini = copy.deepcopy(net)
+        
+        torch.nn.utils.clip_grad_norm_(net.parameters(), 0.2)
         optimizer.step()
 
         # print statistics
